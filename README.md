@@ -24,7 +24,7 @@ Usage is the same as link_to and takes 2 optional arguments ```:matcher``` and `
 The default source matches to ```request.path```. This can be overridden in an initializer
 
 ```ruby
-SelectableLinks.setup do |config|
+SelectedLinks.setup do |config|
   config.default_source = 'request.url'
 end
 ```
