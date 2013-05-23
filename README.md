@@ -1,4 +1,6 @@
-# SelectedLinks
+# Selected Links
+
+[![Build Status](https://travis-ci.org/kainage/selected_links.png)](https://travis-ci.org/kainage/selected_links)
 
 Adds a link helper to ActionView::Base to that adds a class of _selected_
 to the link when matched to a pattern, usually a url.
