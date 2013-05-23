@@ -24,7 +24,7 @@ Usage is the same as link_to and takes 2 optional arguments ```:matcher``` and `
 The default source matches to ```request.path```. This can be overridden in an initializer
 
 ```ruby
-SelectableLinks.setup do |config|
+SelectedLinks.setup do |config|
   config.default_source = 'request.url'
 end
 ```
@@ -33,19 +33,19 @@ end
 
 To make this link have a class of _selected_ when the url is at the top level:
 
-```ruby
+```
 <%= selectable_link_to 'Home', root_url, :matcher => '\/\z' %>
 ```
 
 To make the link selected when the url has _topic_ anywhere in it:
 
-```ruby
+```
 <%= selectable_link_to 'Topics', topics_url, :matcher => 'topic' %>
 ```
 
 Blocks still work and this will do the same thing as the previous example:
 
-```ruby
+```
 <% selectable_link_to community_url, :matcher => 'topic' do %>
   <%= content_tag :span, 'Community', :class => 'foo' %>
 <% end %>
@@ -53,20 +53,20 @@ Blocks still work and this will do the same thing as the previous example:
 
 Without a matcher option and NOT in the block form, this will look for _about_ in the source:
 
-```ruby
+```
 <%= selectable_link_to 'ABOUT', about_url %>
 ```
 
 You can, of course, add this to links with other clases on them:
 
-```ruby
+```
 <%= selectable_link_to 'ABOUT', about_url, :class => 'nav' %>
 # => <a ... class="nav selected">ABOUT</a>
 ```
 
 To override the source per link, just add a ```:source``` argument:
 
-```ruby
+```
 <%= selectable_link_to 'ABOUT', about_url, :source => request.url %>
 ```
 
