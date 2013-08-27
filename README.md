@@ -31,6 +31,14 @@ SelectedLinks.setup do |config|
 end
 ```
 
+You can also change the fallback behaviour to check the name if the matcher fails
+
+```ruby
+SelectedLinks.setup do |config|
+  config.fallback_to_name = false
+end
+```
+
 ### Useage
 
 To make this link have a class of _selected_ when the url is at the top level:
