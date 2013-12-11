@@ -15,11 +15,6 @@ describe SelectedLinks::Link do
         it "should have options" do
           @link.options.should eq 'options'
         end
-
-        it "should have have html_options of a hash with two items" do
-          @link.html_options.should be_a(Hash)
-          @link.html_options.size.should eq 2
-        end
       end
 
       context "with a block" do
@@ -37,11 +32,6 @@ describe SelectedLinks::Link do
           it "should have options" do
             @link.options.should eq 'options'
           end
-
-          it "should have have html_options of a hash with two items" do
-            @link.html_options.should be_a(Hash)
-            @link.html_options.size.should eq 2
-          end
         end
       end
     end
@@ -50,22 +40,6 @@ describe SelectedLinks::Link do
   describe "with valid options" do
     before :each do
       @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'foo')
-    end
-
-    it "should remove source option" do
-      @link.send(:remove_source)
-      @link.html_options.has_key?(:source).should be_false
-    end
-
-    it "should remove matcher option" do
-      @link.send(:remove_matcher)
-      @link.html_options.has_key?(:matcher).should be_false
-    end
-
-    it "should remove both source and matcher options" do
-      @link.send(:cleanup)
-      @link.html_options.has_key?(:source).should be_false
-      @link.html_options.has_key?(:matcher).should be_false
     end
 
     describe "url_match?" do
@@ -120,44 +94,136 @@ describe SelectedLinks::Link do
   end
 
   describe "fully constructed link" do
-    context "with a matcher link" do
-      it "should have a class of selected added" do
-        @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'foo').generate
-        @link.html_options[:class].should =~ /selected/
+    describe "with default class name" do
+      context "with a matcher link" do
+        it "should have a class of active added" do
+          @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'foo').generate
+          @link.html_options[:class].should =~ /active/
+        end
+
+        it "should not have a class of active if there was not a match" do
+          @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'bar').generate
+          @link.html_options[:class].should_not =~ /active/
+        end
       end
 
-      it "should not have a class of selected if there was not a match" do
-        @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'bar').generate
-        @link.html_options[:class].should_not =~ /selected/
+      context "with a named link" do
+        it "should have a class of active added" do
+          @link = SelectedLinks::Link.new('Foo', 'options', :source => '/foo').generate
+          @link.html_options[:class].should =~ /active/
+        end
+
+        it "should not have a class of active if there was not a match" do
+          @link = SelectedLinks::Link.new('Bar', 'options', :source => '/foo').generate
+          @link.html_options[:class].should_not =~ /active/
+        end
+      end
+
+      context "with an existing class" do
+        it "should have a class of active added" do
+          @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'foo', :class => 'nav').generate
+          @link.html_options[:class].should =~ /active/
+        end
+
+        it "should not have a class of active if there was not a match" do
+          @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'bar', :class => 'nav').generate
+          @link.html_options[:class].should_not =~ /active/
+        end
+
+        it 'should have a space between the existing classes and the active class' do
+          @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'foo', :class => 'nav').generate
+          @link.html_options[:class].should == 'nav active'
+        end
       end
     end
 
-    context "with a named link" do
-      it "should have a class of selected added" do
-        @link = SelectedLinks::Link.new('Foo', 'options', :source => '/foo').generate
-        @link.html_options[:class].should =~ /selected/
+    describe "with a passed in class name" do
+      context "with a matcher link" do
+        it "should have a class of passed added" do
+          @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'foo', :class_name => 'passed').generate
+          @link.html_options[:class].should =~ /passed/
+        end
+
+        it "should not have a class of passed if there was not a match" do
+          @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'bar', :class_name => 'passed').generate
+          @link.html_options[:class].should_not =~ /passed/
+        end
       end
 
-      it "should not have a class of selected if there was not a match" do
-        @link = SelectedLinks::Link.new('Bar', 'options', :source => '/foo').generate
-        @link.html_options[:class].should_not =~ /selected/
+      context "with a named link" do
+        it "should have a class of passed added" do
+          @link = SelectedLinks::Link.new('Foo', 'options', :source => '/foo', :class_name => 'passed').generate
+          @link.html_options[:class].should =~ /passed/
+        end
+
+        it "should not have a class of passed if there was not a match" do
+          @link = SelectedLinks::Link.new('Bar', 'options', :source => '/foo', :class_name => 'passed').generate
+          @link.html_options[:class].should_not =~ /passed/
+        end
+      end
+
+      context "with an existing class" do
+        it "should have a class of passed added" do
+          @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'foo', :class_name => 'passed', :class => 'nav').generate
+          @link.html_options[:class].should =~ /passed/
+        end
+
+        it "should not have a class of passed if there was not a match" do
+          @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'bar', :class_name => 'passed', :class => 'nav').generate
+          @link.html_options[:class].should_not =~ /passed/
+        end
+
+        it 'should have a space between the existing classes and the passed class' do
+          @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'foo', :class_name => 'passed', :class => 'nav').generate
+          @link.html_options[:class].should == 'nav passed'
+        end
       end
     end
 
-    context "with an existing class" do
-      it "should have a class of selected added" do
-        @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'foo', :class => 'nav').generate
-        @link.html_options[:class].should =~ /selected/
+    describe "with a overridden default class name" do
+      before :each do
+        SelectedLinks.default_class_name = 'selected'
       end
 
-      it "should not have a class of selected if there was not a match" do
-        @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'bar', :class => 'nav').generate
-        @link.html_options[:class].should_not =~ /selected/
+      context "with a matcher link" do
+        it "should have a class of selected added" do
+          @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'foo').generate
+          @link.html_options[:class].should =~ /selected/
+        end
+
+        it "should not have a class of selected if there was not a match" do
+          @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'bar').generate
+          @link.html_options[:class].should_not =~ /selected/
+        end
       end
 
-      it 'should have a space between the existing classes and the selected class' do
-        @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'foo', :class => 'nav').generate
-        @link.html_options[:class].should == 'nav selected'
+      context "with a named link" do
+        it "should have a class of selected added" do
+          @link = SelectedLinks::Link.new('Foo', 'options', :source => '/foo').generate
+          @link.html_options[:class].should =~ /selected/
+        end
+
+        it "should not have a class of selected if there was not a match" do
+          @link = SelectedLinks::Link.new('Bar', 'options', :source => '/foo').generate
+          @link.html_options[:class].should_not =~ /selected/
+        end
+      end
+
+      context "with an existing class" do
+        it "should have a class of selected added" do
+          @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'foo', :class => 'nav').generate
+          @link.html_options[:class].should =~ /selected/
+        end
+
+        it "should not have a class of selected if there was not a match" do
+          @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'bar', :class => 'nav').generate
+          @link.html_options[:class].should_not =~ /selected/
+        end
+
+        it 'should have a space between the existing classes and the selected class' do
+          @link = SelectedLinks::Link.new('Name', 'options', :source => '/foo', :matcher => 'foo', :class => 'nav').generate
+          @link.html_options[:class].should == 'nav selected'
+        end
       end
     end
   end

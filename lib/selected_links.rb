@@ -15,6 +15,9 @@ module SelectedLinks
   mattr_accessor :fallback_to_name
   @@fallback_to_name = false
 
+  mattr_accessor :default_class_name
+  @@default_class_name = 'active'
+
   def self.setup
     yield self
   end
