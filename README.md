@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/kainage/selected_links.png)](https://travis-ci.org/kainage/selected_links)
 
-Adds a link helper to ActionView::Base to that adds a class of _active_
+Adds a link helper to ActionView::Base. This helper adds a class of _active_
 to the link when matched to a pattern, usually a url.
 
 ## Installation
@@ -21,7 +21,7 @@ Or install it yourself as:
 
 ## Configuration
 
-Usage is the same as link_to and takes 3 optional arguments ```:matcher```, ```:source``` and ```class_name```.
+Usage is the same as link_to, the helper takes 3 optional arguments ```:matcher```, ```:source``` and ```class_name```.
 
 You can override the default behaviour in an initilizer file:
 
@@ -67,7 +67,7 @@ in the source if the option ```fallback_to_name``` is ```true```:
 <%= selectable_link_to 'ABOUT', about_url %>
 ```
 
-You can, of course, add this to links with other clases on them:
+You can add this to links with other clases on them:
 
 ```
 <%= selectable_link_to 'ABOUT', about_url, :class => 'nav' %>
@@ -80,7 +80,7 @@ To override the source per link, just add a ```:source``` argument:
 <%= selectable_link_to 'ABOUT', about_url, :source => request.url %>
 ```
 
-To override the default class name added per link add ```:class_name``` argument:
+To override the default class name added per link, add ```:class_name``` argument:
 
 ```
 <%= selectable_link_to 'ABOUT', about_url, :class_name => 'highlight' %>
